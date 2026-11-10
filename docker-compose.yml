@@ -1,0 +1,57 @@
+services:
+  # 1. Kontainer Backend (Python REST API)
+  backend:
+    build: .
+    image: team-task-backend:latest
+    container_name: team-task-backend
+    ports:
+      - "5000:5000"
+    volumes:
+      # Named Volume untuk menjaga file tasks.json tetap aman walau kontainer dihapus
+      - team-task-data:/var/lib/backend_data
+    networks:
+      - app-net
+    restart: unless-stopped
+
+  # 2. Kontainer Frontend (Nginx Web Server)
+  frontend:
+    image: nginx:alpine
+    container_name: team-task-frontend
+    ports:
+      - "8080:80"
+    volumes:
+      # Bind Mount ke folder host lokal agar edit index.html langsung terlihat tanpa rebuild
+      - ${HOST_PROJECT_DIR:-.}:/usr/share/nginx/html:ro
+    depends_on:
+      - backend
+    networks:
+      - app-net
+    # Konfigurasi Nginx agar meneruskan request /tasks ke kontainer 'backend' via DNS Docker (app-net)
+    command: >
+      /bin/sh -c "printf 'server {
+          listen 80;
+          location / {
+              root /usr/share/nginx/html;
+              index index.html;
+          }
+          location /tasks {
+              proxy_pass http://backend:5000/tasks;
+              proxy_set_header Host $$host;
+          }
+          location /health {
+              proxy_pass http://backend:5000/health;
+          }
+      }' > /etc/nginx/conf.d/default.conf && nginx -g 'daemon off;'"
+    restart: unless-stopped
+
+# Definisi Docker Named Volume (Studi Kasus #6: team-task-data)
+volumes:
+  team-task-data:
+    name: team-task-data
+
+# Definisi Custom Bridge Network terisolasi (app-net)
+networks:
+  app-net:
+    name: app-net
+    driver: bridge
+
