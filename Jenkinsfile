@@ -62,6 +62,7 @@ pipeline {
                             docker rm -f team-task-frontend team-task-backend || true
                             docker compose up -d
                             docker cp index.html team-task-frontend:/usr/share/nginx/html/index.html || true
+                            docker exec team-task-frontend chmod -R 755 /usr/share/nginx/html || true
                         '''
                     } else {
                         bat '''
@@ -82,14 +83,14 @@ pipeline {
                     if (isUnix()) {
                         sh '''
                             docker ps
-                            docker exec team-task-backend python -c "import urllib.request; res = urllib.request.urlopen('http://localhost:5000/tasks'); assert res.status == 200; print('Backend API OK:', res.read().decode())"
-                            docker exec team-task-frontend wget -qO- http://localhost:80 > /dev/null && echo "Frontend Nginx OK (HTTP 200)"
+                            docker exec team-task-backend python -c "import urllib.request; res = urllib.request.urlopen('http://127.0.0.1:5000/tasks'); assert res.status == 200; print('Backend API OK:', res.read().decode())"
+                            docker exec team-task-frontend wget -qO- http://127.0.0.1:80 > /dev/null && echo "Frontend Nginx OK (HTTP 200)"
                         '''
                     } else {
                         bat '''
                             docker ps
-                            docker exec team-task-backend python -c "import urllib.request; res = urllib.request.urlopen('http://localhost:5000/tasks'); assert res.status == 200; print('Backend API OK:', res.read().decode())"
-                            docker exec team-task-frontend wget -qO- http://localhost:80 > NUL && echo Frontend Nginx OK (HTTP 200)
+                            docker exec team-task-backend python -c "import urllib.request; res = urllib.request.urlopen('http://127.0.0.1:5000/tasks'); assert res.status == 200; print('Backend API OK:', res.read().decode())"
+                            docker exec team-task-frontend wget -qO- http://127.0.0.1:80 > NUL && echo Frontend Nginx OK (HTTP 200)
                         '''
                     }
                 }
