@@ -7,10 +7,10 @@
 ## 👥 Identitas Kelompok L
 | No | Nama Lengkap | NIM | Peran |
 | :-: | :--- | :--- | :--- |
-| 1 | [Nama Anggota 1] | [NIM Anggota 1] | Backend & Docker Architecture |
-| 2 | [Nama Anggota 2] | [NIM Anggota 2] | Frontend & UI/UX |
-| 3 | [Nama Anggota 3] | [NIM Anggota 3] | Jenkins CI/CD & GitHub Webhook |
-| 4 | [Nama Anggota 4] | [NIM Anggota 4] | Dokumentasi & Pengujian |
+| 1 | Liony Syafitri | 101012330035 | Backend & Docker Architecture |
+| 2 | Amelya Fazrin | 101012330146 | Frontend & UI/UX |
+| 3 | Hanif Rafsanjani | 101012330044 | Jenkins CI/CD & GitHub Webhook |
+| 4 | Ziya Bahjatulloh | 101012300364 | Dokumentasi & Pengujian |
 
 ---
 
