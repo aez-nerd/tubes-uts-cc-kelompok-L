@@ -2,7 +2,7 @@ pipeline {
     agent any
 
     environment {
-        COMPOSE_PROJECT_NAME = 'team-task-app'
+        COMPOSE_PROJECT_NAME = 'tubesutscc'
         BACKEND_IMAGE = 'team-task-backend:latest'
     }
 
@@ -59,12 +59,13 @@ pipeline {
                             if [ -d "/host_project" ]; then
                                 cp -f index.html app.py Dockerfile docker-compose.yml /host_project/ || true
                             fi
-                            docker compose down
+                            docker rm -f team-task-frontend team-task-backend || true
                             docker compose up -d
+                            docker cp index.html team-task-frontend:/usr/share/nginx/html/index.html || true
                         '''
                     } else {
                         bat '''
-                            docker compose down
+                            docker rm -f team-task-frontend team-task-backend
                             docker compose up -d
                         '''
                     }

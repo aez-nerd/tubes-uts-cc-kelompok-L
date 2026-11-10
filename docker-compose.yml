@@ -21,7 +21,7 @@ services:
       - "8080:80"
     volumes:
       # Bind Mount ke folder host lokal agar edit index.html langsung terlihat tanpa rebuild
-      - ${HOST_PROJECT_DIR:-.}:/usr/share/nginx/html:ro
+      - ./:/usr/share/nginx/html
     depends_on:
       - backend
     networks:
